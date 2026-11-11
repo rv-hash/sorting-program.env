@@ -1,0 +1,260 @@
+
+    import java.io.*;
+    import java.util.*;
+
+    public class Sorting_Program {
+
+        // Save numbers to numbers.txt
+        public static void saveToFile(int[] numbers) {
+            try {
+                FileWriter writer = new FileWriter("numbers.txt");
+                
+                writer.write("iput mo :\n");
+
+                for (int number : numbers) {
+                    writer.write(number + "\n");
+                }
+
+                writer.close();
+
+                System.out.println("\nNumbers successfully saved to numbers.txt!");
+
+            } catch (IOException e) {
+                System.out.println("Error saving numbers to file.");
+            }
+        }
+
+        // Read numbers from numbers.txt
+        public static int[] readFromFile(int numberOfItems) {
+            int[] numbers = new int[numberOfItems];
+
+            try {
+                Scanner file = new Scanner(new File("numbers.txt"));
+            
+                int i = 0;
+
+                file.nextLine();
+
+                while (file.hasNextInt() && i < numberOfItems) {
+                    numbers[i] = file.nextInt();
+                    i++;
+                }
+
+                file.close();
+
+            } catch (FileNotFoundException e) {
+                System.out.println("Error: numbers.txt not found.");
+            }
+
+            return numbers;
+        }
+
+        // Display the numbers
+        public static void displayNumbers(int[] numbers) {
+            for (int number : numbers) {
+                System.out.print(number + " ");
+            }
+
+            System.out.println();
+        }
+
+        // Bubble Sort
+        public static void bubbleSort(int[] numbers) {
+
+            System.out.println("\n--- BUBBLE SORT ---");
+
+            try {
+                FileWriter writer = new FileWriter("numbers.txt", true);
+
+                writer.write("\n--- BUBBLE SORT ---\n");
+
+                for (int i = 0; i < numbers.length - 1; i++) {
+
+                    for (int j = 0; j < numbers.length - i - 1; j++) {
+
+                        if (numbers[j] > numbers[j + 1]) {
+
+                            int temp = numbers[j];
+                            numbers[j] = numbers[j + 1];
+                            numbers[j + 1] = temp;
+                        }
+                    }
+
+                    System.out.print("Iteration " + (i + 1) + ": ");
+                    displayNumbers(numbers);
+
+                    writer.write("Iteration " + (i + 1) + ": "
+                            + Arrays.toString(numbers) + "\n");
+                }
+
+                writer.close();
+
+            } catch (IOException e) {
+                System.out.println("Error saving Bubble Sort iterations.");
+            }
+        }
+
+        // Selection Sort
+        public static void selectionSort(int[] numbers) {
+
+            System.out.println("\n--- SELECTION SORT ---");
+
+            try {
+                FileWriter writer = new FileWriter("numbers.txt", true);
+
+                writer.write("\n--- SELECTION SORT ---\n");
+
+                for (int i = 0; i < numbers.length - 1; i++) {
+
+                    int minimumIndex = i;
+
+                    for (int j = i + 1; j < numbers.length; j++) {
+
+                        if (numbers[j] < numbers[minimumIndex]) {
+                            minimumIndex = j;
+                        }
+                    }
+
+                    int temp = numbers[i];
+                    numbers[i] = numbers[minimumIndex];
+                    numbers[minimumIndex] = temp;
+
+                    System.out.print("Iteration " + (i + 1) + ": ");
+                    displayNumbers(numbers);
+
+                    writer.write("Iteration " + (i + 1) + ": "
+                            + Arrays.toString(numbers) + "\n");
+                }
+
+                writer.close();
+
+            } catch (IOException e) {
+                System.out.println("Error saving Selection Sort iterations.");
+            }
+        }
+
+        // Insertion Sort
+        public static void insertionSort(int[] numbers) {
+
+            System.out.println("\n--- INSERTION SORT ---");
+
+            try {
+                FileWriter writer = new FileWriter("numbers.txt", true);
+
+                writer.write("\n--- INSERTION SORT ---\n");
+
+                for (int i = 1; i < numbers.length; i++) {
+
+                    int key = numbers[i];
+                    int j = i - 1;
+
+                    while (j >= 0 && numbers[j] > key) {
+
+                        numbers[j + 1] = numbers[j];
+                        j--;
+                    }
+
+                    numbers[j + 1] = key;
+
+                    System.out.print("Iteration " + i + ": ");
+                    displayNumbers(numbers);
+
+                    writer.write("Iteration " + i + ": "
+                            + Arrays.toString(numbers) + "\n");
+                }
+
+                writer.close();
+
+            } catch (IOException e) {
+                System.out.println("Error saving Insertion Sort iterations.");
+            }
+        }
+
+        public static void main(String[] args) {
+
+            Scanner input = new Scanner(System.in);
+
+            System.out.println("======================================");
+            System.out.println("       SORTING ALGORITHM PROGRAM      ");
+            System.out.println("======================================");
+
+            // Ask for number of items
+            System.out.print("\nEnter number of items: ");
+            int numberOfItems = input.nextInt();
+
+            // Validate number of items
+            if (numberOfItems <= 0) {
+                System.out.println("Invalid number of items.");
+                input.close();
+                return;
+            }
+
+            // Create array
+            int[] numbers = new int[numberOfItems];
+
+            // Ask the user to enter numbers
+            System.out.println("\nEnter " + numberOfItems + " numbers:");
+
+            for (int i = 0; i < numberOfItems; i++) {
+
+                System.out.print("Number " + (i + 1) + ": ");
+                numbers[i] = input.nextInt();
+            }
+
+            // Save the original numbers
+            saveToFile(numbers);
+
+            int choice;
+
+            do {
+
+                System.out.println("\n======================================");
+                System.out.println("             SORTING MENU             ");
+                System.out.println("======================================");
+                System.out.println("1. Bubble Sort");
+                System.out.println("2. Selection Sort");
+                System.out.println("3. Insertion Sort");
+                System.out.println("4. Exit");
+                System.out.println("======================================");
+
+                System.out.print("Enter your choice: ");
+                choice = input.nextInt();
+
+                if (choice >= 1 && choice <= 3) {
+
+                    // Read original numbers from the file
+                    int[] sortedNumbers = readFromFile(numberOfItems);
+
+                    System.out.print("\nOriginal Numbers: ");
+                    displayNumbers(sortedNumbers);
+
+                    if (choice == 1) {
+
+                        bubbleSort(sortedNumbers);
+
+                    } else if (choice == 2) {
+
+                        selectionSort(sortedNumbers);
+
+                    } else if (choice == 3) {
+
+                        insertionSort(sortedNumbers);
+                    }
+
+                    System.out.print("\nSorted Numbers:   ");
+                    displayNumbers(sortedNumbers);
+
+                } else if (choice == 4) {
+
+                    System.out.println("\nThank you for using the program!");
+
+                } else {
+
+                    System.out.println("\nInvalid choice. Please choose 1-4.");
+                }
+
+            } while (choice != 4);
+
+            input.close();
+        }
+    }
